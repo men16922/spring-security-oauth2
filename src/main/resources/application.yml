@@ -6,35 +6,14 @@ spring:
     oauth2:
       client:
         registration:
-          keycloak1:
+          keycloak:
             clientId: oauth2-client-app
-            clientSecret: CsJlVOw2en5hjFaIHeJYAbL3KTJGmKRf
+            clientSecret: 7tKUoWBkupVXE7CKKHrZzlcXV6etNuhx
             clientName: oauth2-client-app
             authorizationGrantType: authorization_code
             scope: openid,profile
             clientAuthenticationMethod: client_secret_basic
-            redirectUri: http://localhost:8081/login/oauth2/code/keycloak
-            provider: keycloak
-
-          keycloakWithPKCE:
-            clientId: oauth2-client-app2
-            clientSecret: drHUtlonLRm4BI0Wp7Ix1UC2YzpNsNRk
-            clientName: oauth2-client-app2
-            authorizationGrantType: authorization_code
-            scope: openid,profile
-            clientAuthenticationMethod: client_secret_basic
-            #                        clientAuthenticationMethod: none
-            redirectUri: http://localhost:8081/login/oauth2/code/keycloak
-            provider: keycloak
-
-          keycloak2:
-            clientId: oauth2-client-app3
-            clientSecret: Z3cJF88AZDIJHfcAnXVIUpiFZpfAoyq0
-            clientName: oauth2-client-app3
-            authorizationGrantType: implicit
-            scope: openid,profile
-            clientAuthenticationMethod: none
-            redirectUri: http://localhost:8081/home
+            redirectUri: http://localhost:8081/client
             provider: keycloak
 
         provider:
