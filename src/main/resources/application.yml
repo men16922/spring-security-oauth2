@@ -8,7 +8,7 @@ spring:
         registration:
           keycloak1:
             clientId: oauth2-client-app
-            clientSecret: dXf021lMWuZ9kZafqxZn230MvVEdROIo
+            clientSecret: CsJlVOw2en5hjFaIHeJYAbL3KTJGmKRf
             clientName: oauth2-client-app
             authorizationGrantType: authorization_code
             scope: openid,profile
@@ -18,7 +18,7 @@ spring:
 
           keycloakWithPKCE:
             clientId: oauth2-client-app2
-            clientSecret: 2cejARMoAhl95E4drdGm5ROzTof0S8Zz
+            clientSecret: drHUtlonLRm4BI0Wp7Ix1UC2YzpNsNRk
             clientName: oauth2-client-app2
             authorizationGrantType: authorization_code
             scope: openid,profile
@@ -29,7 +29,7 @@ spring:
 
           keycloak2:
             clientId: oauth2-client-app3
-            clientSecret: tynI8eYUw4H1fJYxwLQ36XhFC1Ge1w1x
+            clientSecret: Z3cJF88AZDIJHfcAnXVIUpiFZpfAoyq0
             clientName: oauth2-client-app3
             authorizationGrantType: implicit
             scope: openid,profile

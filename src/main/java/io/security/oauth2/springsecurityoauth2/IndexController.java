@@ -11,7 +11,6 @@ public class IndexController {
     @Autowired
     private ClientRegistrationRepository clientRegistrationRepository;
 
-
     @GetMapping("/")
     public String index(){
         return "index";
