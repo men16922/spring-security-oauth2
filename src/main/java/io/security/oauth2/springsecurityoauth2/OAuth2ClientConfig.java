@@ -16,8 +16,8 @@ public class OAuth2ClientConfig {
                        .antMatchers("/loginPage")
                        .permitAll()
                        .anyRequest().authenticated());
-//       http.oauth2Login(Customizer.withDefaults());
-       http.oauth2Login(oauth2 -> oauth2.loginPage("/loginPage"));
+       http.oauth2Login(Customizer.withDefaults());
+//       http.oauth2Login(oauth2 -> oauth2.loginPage("/loginPage"));
        return http.build();
    }
 }
