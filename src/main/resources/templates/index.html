@@ -6,18 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
-    <script>
-        function authorizationCode(){
-            window.location = new URL('http://localhost:8081/oauth2/authorization/keycloak');
-        }
-
-    </script>
 </head>
 <body>
-<div>Welcome</div>
+<div>Welcome <span th:text = "${oAuth2AuthenticationToken}"/></div>
 <div sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></div>
-<form sec:authorize="isAnonymous()" action="#">
-    <p><input type="button" onclick="authorizationCode()" value="AuthorizationCode Grant" />
-</form>
 </body>
 </html>
