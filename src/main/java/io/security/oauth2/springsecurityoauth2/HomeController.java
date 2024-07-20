@@ -15,7 +15,7 @@ public class HomeController {
     private OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
     @GetMapping("/home")
-    public String home(Model model, OAuth2AuthenticationToken oAuth2AuthenticationToken){
+    public String home(Model model, OAuth2AuthenticationToken oAuth2AuthenticationToken) {
 
         OAuth2AuthorizedClient authorizedClient = oAuth2AuthorizedClientService
                 .loadAuthorizedClient("keycloak", oAuth2AuthenticationToken.getName());
