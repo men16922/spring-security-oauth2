@@ -35,9 +35,9 @@ public class OAuth2ResourceServerConfig {
 //        return JwtDecoders.fromOidcIssuerLocation(oAuth2ResourceServerProperties.getJwt().getIssuerUri());
 //    }
 
-    @Bean
-    public JwtDecoder jwtDecoder3() {
-        return NimbusJwtDecoder.withJwkSetUri(oAuth2ResourceServerProperties.getJwt().getJwkSetUri())
-                .jwsAlgorithm(SignatureAlgorithm.RS512).build();
-    }
+//    @Bean
+//    public JwtDecoder jwtDecoder3() {
+//        return NimbusJwtDecoder.withJwkSetUri(oAuth2ResourceServerProperties.getJwt().getJwkSetUri())
+//                .jwsAlgorithm(SignatureAlgorithm.RS512).build();
+//    }
 }
