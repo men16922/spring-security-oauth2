@@ -1,7 +1,6 @@
 package io.security.oauth2.springsecurityoauth2.filter.authorization;
 
 import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,12 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
-
-    private JWSVerifier jwsVerifier;
-
+    private final JWSVerifier jwsVerifier;
     public JwtAuthorizationFilter(JWSVerifier jwsVerifier) {
         this.jwsVerifier = jwsVerifier;
     }
@@ -29,34 +25,28 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-        String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+        if (tokenResolve(request)){
+            filterChain.doFilter(request,response);
             return;
         }
-        String token = header.replace("Bearer ", "");
+        String token = getToken(request);
 
         SignedJWT signedJWT;
         try {
             signedJWT = SignedJWT.parse(token);
 
-            boolean verify = signedJWT.verify(jwsVerifier);
+            signedJWT.verify(jwsVerifier);
 
-            if (verify) {
-                JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
-                String username = jwtClaimsSet.getClaim("username").toString();
-                List<String> authority = (List) jwtClaimsSet.getClaim("authority");
+            String username = signedJWT.getJWTClaimsSet().getClaim("username").toString();
+            List<String> authority = (List)signedJWT.getJWTClaimsSet().getClaim("authority");
 
-                if (username != null) {
-                    UserDetails user = User.withUsername(username)
-                            .password(UUID.randomUUID().toString())
-                            .authorities(authority.get(0))
-                            .build();
-
-                    Authentication authentication =
-                            new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+            if (username != null) {
+                UserDetails user = User.builder().username(username)
+                        .password("")
+                        .authorities(authority.get(0))
+                        .build();
+                Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
         } catch (Exception e) {
@@ -64,5 +54,14 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    protected String getToken(HttpServletRequest request) {
+        return request.getHeader("Authorization").replace("Bearer ", "");
+    }
+
+    protected boolean tokenResolve(HttpServletRequest request) throws IOException, ServletException {
+        String header = request.getHeader("Authorization");
+        return header == null || !header.startsWith("Bearer ");
     }
 }

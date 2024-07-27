@@ -17,7 +17,7 @@ public class JwtDecoderConfig {
 
     @Bean
     @ConditionalOnProperty(prefix = "spring.security.oauth2.resourceserver.jwt", name = "jws-algorithms", havingValue = "HS256", matchIfMissing = false)
-    public JwtDecoder jwtDecoderBySecretKeyValue(OctetSequenceKey octetSequenceKey, OAuth2ResourceServerProperties properties) {
+    public JwtDecoder jwtDecoderBySecretKeyValue(OctetSequenceKey octetSequenceKey,OAuth2ResourceServerProperties properties) {
         return NimbusJwtDecoder.withSecretKey(octetSequenceKey.toSecretKey())
                 .macAlgorithm(MacAlgorithm.from(properties.getJwt().getJwsAlgorithms().get(0)))
                 .build();
