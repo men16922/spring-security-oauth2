@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexController {
 
     @GetMapping("/")
-    public String index(){
+    public String index() {
         return "index";
     }
 
     @GetMapping("/api/user")
-    public Authentication user(Authentication authentication){
+    public Authentication user(Authentication authentication) {
         return authentication;
     }
 }
