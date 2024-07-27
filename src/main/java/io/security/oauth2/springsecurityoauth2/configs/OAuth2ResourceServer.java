@@ -1,6 +1,9 @@
 package io.security.oauth2.springsecurityoauth2.configs;
 
+import com.nimbusds.jose.jwk.OctetSequenceKey;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
+import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationMacFilter;
+import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,14 +24,26 @@ import javax.servlet.Filter;
 @Configuration
 public class OAuth2ResourceServer {
 
+    @Autowired
+    private MacSecuritySigner macSecuritySigner;
+
+    @Autowired
+    private OctetSequenceKey octetSequenceKey;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests((requests) -> requests.antMatchers("/").permitAll()
                 .anyRequest().authenticated());
         http.userDetailsService(userDetailsService());
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(macSecuritySigner, octetSequenceKey), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAutorizationFilter(octetSequenceKey), UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public JwtAuthorizationMacFilter jwtAutorizationFilter(OctetSequenceKey octetSequenceKey) {
+        return new JwtAuthorizationMacFilter(octetSequenceKey);
     }
 
     @Bean
@@ -37,8 +52,8 @@ public class OAuth2ResourceServer {
     }
 
     @Bean
-    public Filter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter();
+    public Filter jwtAuthenticationFilter(MacSecuritySigner macSecuritySigner, OctetSequenceKey octetSequenceKey) throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(macSecuritySigner, octetSequenceKey);
         jwtAuthenticationFilter.setAuthenticationManager(authenticationManager(null));
         return jwtAuthenticationFilter;
     }
