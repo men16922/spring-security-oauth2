@@ -8,23 +8,34 @@ import org.springframework.web.bind.annotation.RestController;
 public class PhotoController {
 
     @GetMapping("/photos/1")
-    public Photo photosUrl(){
-
+    public Photo photo1(){
         return Photo.builder()
                 .photoId("1")
-                .photoDescription("Photo 1 title")
+                .photoTitle("Photo 1 title")
+                .photoDescription("Photo is nice")
                 .userId("user1")
                 .build();
     }
 
     @GetMapping("/photos/2")
-    @PreAuthorize("hasAuthority('SCOPE_photo')")
-    public Photo photosMethod(){
-
+    @PreAuthorize("hasAnyAuthority('ROLE_photo')")
+    public Photo photo2(){
         return Photo.builder()
                 .photoId("2")
-                .photoDescription("Photo 2 title")
+                .photoTitle("Photo 2 title")
+                .photoDescription("Photo is beauty")
                 .userId("user2")
+                .build();
+    }
+
+    @GetMapping("/photos/3")
+    @PreAuthorize("hasAnyAuthority('ROLE_default-roles-oauth2')")
+    public Photo photo3(){
+        return Photo.builder()
+                .photoId("3")
+                .photoTitle("Photo 3 title")
+                .photoDescription("Photo is beauty")
+                .userId("user3")
                 .build();
     }
 }
