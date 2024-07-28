@@ -1,0 +1,9 @@
+server:
+  port: 9000
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    io.security.oauth2.springsecurityoauth2: DEBUG
