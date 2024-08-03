@@ -41,18 +41,18 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public ProviderSettings providerSettings() {
+    public ProviderSettings providerSettings(){
         return ProviderSettings.builder().issuer("http://localhost:9000").build();
     }
 
     @Bean
-    public RegisteredClientRepository registeredClientRepository() {
+    public RegisteredClientRepository registeredClientRepository(){
 
-        RegisteredClient registeredClient1 = getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
-        RegisteredClient registeredClient2 = getRegisteredClient("oauth2-client-app2", "{noop}secret2", "read", "delete");
-        RegisteredClient registeredClient3 = getRegisteredClient("oauth2-client-app3", "{noop}secret3", "read", "update");
+        RegisteredClient registeredClient1= getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
+        RegisteredClient registeredClient2= getRegisteredClient("oauth2-client-app2", "{noop}secret2", "read", "delete");
+        RegisteredClient registeredClient3= getRegisteredClient("oauth2-client-app3", "{noop}secret3", "read", "update");
 
-        return new InMemoryRegisteredClientRepository(Arrays.asList(registeredClient1, registeredClient2, registeredClient3));
+        return new InMemoryRegisteredClientRepository(Arrays.asList(registeredClient1,registeredClient2,registeredClient3));
 
     }
 
