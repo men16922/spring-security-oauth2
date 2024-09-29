@@ -1,4 +1,4 @@
-package io.security.oauth2.springsecurityoauth2;
+package io.security.oauth2.authorizationserver;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,31 +36,31 @@ public class AuthorizationServerConfig {
                 new OAuth2AuthorizationServerConfigurer<>();
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->
-                authorizationEndpoint
-                        .authenticationProvider(customAuthenticationProvider)
-                        .authorizationResponseHandler(new AuthenticationSuccessHandler() {
-                                                          @Override
-                                                          public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                                                              OAuth2AuthorizationCodeRequestAuthenticationToken authentication1 = (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
-                                                              System.out.println(authentication);
-                                                              String redirectUri = authentication1.getRedirectUri();
-                                                              String authorizationCode = authentication1.getAuthorizationCode().getTokenValue();
-                                                              String state = null;
-                                                              if (StringUtils.hasText(authentication1.getState())) {
-                                                                  state = authentication1.getState();
-                                                              }
-                                                              response.sendRedirect(redirectUri+"?code="+authorizationCode+"&state="+state);
-                                                          }
-                                                      }
-                        )
-                        .errorResponseHandler(new AuthenticationFailureHandler() {
-                            @Override
-                            public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                                System.out.println(exception.toString());
-                                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                            }
-                        })
-        );
+                        authorizationEndpoint
+                                .authenticationProvider(customAuthenticationProvider)
+                                .authorizationResponseHandler(new AuthenticationSuccessHandler() {
+                                            @Override
+                                            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                                                OAuth2AuthorizationCodeRequestAuthenticationToken authentication1 = (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
+                                                System.out.println(authentication);
+                                                String redirectUri = authentication1.getRedirectUri();
+                                                String authorizationCode = authentication1.getAuthorizationCode().getTokenValue();
+                                                String state = null;
+                                                if (StringUtils.hasText(authentication1.getState())) {
+                                                    state = authentication1.getState();
+                                                }
+                                                response.sendRedirect(redirectUri+"?code="+authorizationCode+"&state="+state);
+                                            }
+                                        }
+                                )
+                                .errorResponseHandler(new AuthenticationFailureHandler() {
+                                    @Override
+                                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+                                        System.out.println(exception.toString());
+                                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                                    }
+                                })
+                );
 
         http
                 .requestMatcher(endpointsMatcher)
@@ -76,3 +76,4 @@ public class AuthorizationServerConfig {
         return http.build();
     }
 }
+

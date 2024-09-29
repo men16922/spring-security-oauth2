@@ -1,9 +1,11 @@
 server:
-  port: 9000
+  port: 8081
 
-logging:
-  level:
-    root: INFO
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    io.security.oauth2.springsecurityoauth2: DEBUG
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: http://localhost:9000/oauth2/introspect
+          client-id: oauth2-client-app1
+          client-secret: secret1

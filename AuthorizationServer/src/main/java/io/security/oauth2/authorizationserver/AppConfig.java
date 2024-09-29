@@ -1,4 +1,4 @@
-package io.security.oauth2.springsecurityoauth2;
+package io.security.oauth2.authorizationserver;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -39,7 +39,7 @@ public class AppConfig {
     @Bean
     public RegisteredClientRepository registeredClientRepository(){
 
-        RegisteredClient registeredClient1= getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
+            RegisteredClient registeredClient1= getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
         RegisteredClient registeredClient2= getRegisteredClient("oauth2-client-app2", "{noop}secret2", "read", "delete");
         RegisteredClient registeredClient3= getRegisteredClient("oauth2-client-app3", "{noop}secret3", "read", "update");
 
@@ -67,6 +67,7 @@ public class AppConfig {
                 .scope(scope1)
                 .scope(scope2)
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+//                .tokenSettings(TokenSettings.builder().reuseRefreshTokens(false).build())
                 .build();
     }
 
