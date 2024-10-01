@@ -6,9 +6,11 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
@@ -39,7 +41,7 @@ public class AppConfig {
     @Bean
     public RegisteredClientRepository registeredClientRepository(){
 
-            RegisteredClient registeredClient1= getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
+        RegisteredClient registeredClient1= getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
         RegisteredClient registeredClient2= getRegisteredClient("oauth2-client-app2", "{noop}secret2", "read", "delete");
         RegisteredClient registeredClient3= getRegisteredClient("oauth2-client-app3", "{noop}secret3", "read", "update");
 
@@ -64,11 +66,18 @@ public class AppConfig {
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .scope(OidcScopes.EMAIL)
+                .scope(OidcScopes.ADDRESS)
+                .scope(OidcScopes.PHONE)
                 .scope(scope1)
                 .scope(scope2)
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
 //                .tokenSettings(TokenSettings.builder().reuseRefreshTokens(false).build())
                 .build();
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource){
+        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
     }
 
     @Bean

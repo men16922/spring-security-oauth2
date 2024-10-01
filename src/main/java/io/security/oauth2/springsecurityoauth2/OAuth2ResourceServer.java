@@ -9,6 +9,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration(proxyBeanMethods = false)
 public class OAuth2ResourceServer {
 
+    
+
     @Bean
     SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests.anyRequest().authenticated());
